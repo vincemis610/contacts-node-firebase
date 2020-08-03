@@ -1,0 +1,123 @@
+<div class="col-md-4 col-12 mb-4">
+    <div class="card" width="100%">
+        <div class="text-center card-header">
+            New contact
+        </div>
+        <div class="card-body">
+            <form action="/add-contact" method="POST">
+                <div class="form-group">
+                    <input placeholder="First Name" class="form-control" type="text" name="firstname" autofocus required>
+                </div>
+                <div class="form-group">
+                    <input placeholder="Last Name" class="form-control" type="text" name="lastname" required>
+                </div>
+                <div class="form-group">
+                    <input placeholder="mail" class="form-control" type="text" name="mail" required>
+                </div>
+                <div class="form-group">
+                    <input placeholder="phone" class="form-control" type="text" name="phone" required>
+                </div>
+                <button class="btn btn-info btn-block">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="col-md-8 col-12">
+    {{#if contacts}}
+    <table class="table table-striped text-center" id="mytable">
+      <thead class="thead-dark">
+        <tr>
+          <th>Name</th>
+          <th>Last Name</th>
+          <th style="display: none;">mail</th>
+          <th>Phone</th>
+          <th>Option</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+            {{#each contacts}}
+                <tr>  
+                    <td>{{firstname}}</td> 
+                    <td>{{lastname}}</td> 
+                    <td style="display: none;">{{mail}}</td> 
+                    <td>{{phone}}</td> 
+                    <td>
+                        <a href="/remove-contact?key={{@key}}" class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" class="btn btn-info btn-sm edit" 
+                            data-key="{{@key}}"
+                            data-fname="{{firstname}}"
+                            data-lname="{{lastname}}"
+                            data-mail="{{mail}}"
+                            data-phone="{{phone}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                    </td> 
+                </tr>
+            {{/each}}
+       
+      </tbody>
+    </table>
+    {{else}}
+        <div class="text-center bg-secondary p-3"><h3>No Contacts</h3></div>
+    {{/if}}
+</div>
+
+<form action="/update-contact" method="post">
+    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Contact</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" name="key" class="form-control key">
+            <div class="form-group">
+                <input type="text" name="firstname" class="form-control fname" placeholder="First Name" required>
+            </div>
+ 
+            <div class="form-group">
+                <input type="text" name="lastname" class="form-control lname" placeholder="Last Name" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="mail" class="form-control mail" placeholder="Mail" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="phone" class="form-control phone" placeholder="Phone" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" name="id" class="product_id">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+            //showing data to edit modal      
+        $('#mytable').on('click','.edit',function(){
+        var key = $(this).data('key');
+        var fname = $(this).data('fname');
+        var lname = $(this).data('lname');
+        var phone = $(this).data('phone');
+        var mail = $(this).data('mail');
+        $('#EditModal').modal('show');
+        $('.fname').val(fname);
+        $('.lname').val(lname);
+        $('.mail').val(mail);
+        $('.phone').val(phone);
+        $('.key').val(key);
+        console.log(key);
+      });
+    });
+</script>
